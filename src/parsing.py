@@ -50,20 +50,12 @@ def location_data(json_path='Dataset/location-history.json'):
             })
 
     df = pd.DataFrame(records)
-    
-    # Convert to datetime
+
+    # Converting time
     df["start_time"] = pd.to_datetime(df["start_time"], errors='coerce', utc=True)
     df["end_time"] = pd.to_datetime(df["end_time"], errors='coerce', utc=True)
 
-    # Ensure both are datetime64[ns]
-    print("start_time dtype:", df["start_time"].dtype)
-    print("end_time dtype:", df["end_time"].dtype)
-
-    # Drop rows with invalid or missing times
-    df = df.dropna(subset=["start_time", "end_time"])
-    df = df[df["end_time"] > df["start_time"]]
-
-    # Compute duration using .dt
+    # Duration column
     df["duration_min"] = (df["end_time"] - df["start_time"]).dt.total_seconds() / 60
 
     return df
