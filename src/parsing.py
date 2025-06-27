@@ -16,11 +16,25 @@ def location_data(json_path='Dataset/location-history.json'):
         if "activity" in entry:
             activity = entry["activity"]
             top = activity.get("topCandidate", {})
+
+            start_raw = activity.get("start", "").replace("geo:", "")
+            end_raw = activity.get("end", "").replace("geo:", "")
+
+            try:
+                start_lat, start_lon = map(float, start_raw.split(","))
+                end_lat, end_lon = map(float, end_raw.split(","))
+            except:
+                start_lat, start_lon, end_lat, end_lon = None, None, None, None
+
             records.append({
                 **base,
                 "type": "activity",
-                "start_location": activity.get("start", "").replace("geo:", ""),
-                "end_location": activity.get("end", "").replace("geo:", ""),
+                "start_location": start_raw,
+                "end_location": end_raw,
+                "start_lat": start_lat,
+                "start_lon": start_lon,
+                "end_lat": end_lat,
+                "end_lon": end_lon,
                 "distance_m": float(activity.get("distanceMeters", "0")),
                 "transport_type": top.get("type", "unknown"),
                 "transport_prob": top.get("probability", None),
@@ -39,6 +53,10 @@ def location_data(json_path='Dataset/location-history.json'):
                 "type": "visit",
                 "start_location": None,
                 "end_location": None,
+                "start_lat": None,
+                "start_lon": None,
+                "end_lat": None,
+                "end_lon": None,
                 "distance_m": None,
                 "transport_type": None,
                 "transport_prob": None,
@@ -51,11 +69,11 @@ def location_data(json_path='Dataset/location-history.json'):
 
     df = pd.DataFrame(records)
 
-    # Converting time
+    # Convert time columns
     df["start_time"] = pd.to_datetime(df["start_time"], errors='coerce', utc=True)
     df["end_time"] = pd.to_datetime(df["end_time"], errors='coerce', utc=True)
 
-    # Duration column
+    # Calculate duration in minutes
     df["duration_min"] = (df["end_time"] - df["start_time"]).dt.total_seconds() / 60
 
     return df
