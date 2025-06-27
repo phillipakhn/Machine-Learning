@@ -52,4 +52,4 @@ pip3 install -r requirements.txt
 jupyter notebook
 ```
 
-Then open and run `notebook.ipynb` step-by-step.
+Then open and run `notebook.ipynb`
