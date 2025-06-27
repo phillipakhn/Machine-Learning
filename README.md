@@ -12,13 +12,12 @@ The notebook extracts features like average speed, duration, and distance, and t
 ## Dataset
 
 The project uses data exported from Google Maps Timeline in JSON format.  
-Make sure you include your own data in this structure:
 
 ```
 Dataset/location-history.json
 ```
 
-The data is parsed and transformed into a structured DataFrame for model training and evaluation.
+Data contains several hundred travel segements for Egypt, Kuwait, and USA.
 
 ---
 
@@ -53,3 +52,12 @@ jupyter notebook
 ```
 
 Then open and run `notebook.ipynb`
+
+---
+
+## File Structure
+
+`parsing.py` parses the dataset so it can be used in `notebook.ipynb` for training and evaluating machine learning models.
+
+`notebook.ipynb` contains several machine learning models, including data loading, feature engineering, model training, evaluation, and visualization of transportation mode predictions.
+ 
