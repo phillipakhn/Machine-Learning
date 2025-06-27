@@ -6,7 +6,7 @@ def location_data(json_path='Dataset/location-history.json'):
         data = json.load(file)
 
     records = []
-
+    
     for entry in data:
         base = {
             "start_time": entry.get("startTime"),
